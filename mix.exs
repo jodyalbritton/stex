@@ -6,6 +6,8 @@ defmodule Stex.Mixfile do
       app: :stex,
       version: "0.1.0",
       elixir: "~> 1.5",
+      description: "A lightweight client for the new SmartThings API",
+      source_url: "https://github.com/jodyalbritton/stex",
       start_permanent: Mix.env == :prod,
       deps: deps()
     ]
