@@ -9,7 +9,12 @@ defmodule Stex.Mixfile do
       description: "A lightweight client for the new SmartThings API",
       source_url: "https://github.com/jodyalbritton/stex",
       start_permanent: Mix.env == :prod,
-      deps: deps()
+      deps: deps(),
+      package: [
+        maintainers: ["Jody Albritton"],
+        licenses: ["Apache 2.0"],
+        links: %{"GitHub" => "https://github.com/jodyalbritton/stex"}
+      ]
     ]
   end
 
@@ -27,7 +32,8 @@ defmodule Stex.Mixfile do
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"},
       {:httpoison, "~> 0.13"},
       {:poison, "~> 3.1"},
-      {:apex, "~>1.2.0"}
+      {:apex, "~>1.2.0"},
+      {:ex_doc, ">= 0.0.0", only: :dev}
     ]
   end
 end
