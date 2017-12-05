@@ -14,6 +14,21 @@ defmodule Stex do
       defstruct access_token: nil, api_base: nil, headers: nil
   end
 
+
+  @doc """
+  Connect function creates a map that can be used for chaining commands to the SmartThings API
+
+  Takes a single argument. A personal access token which can be obtained here:
+
+  https://account.smartthings.com/tokens
+
+  returns a map
+
+  %Client{access_token: xyx-qwe-wewewe, api_base: "https://api.smartthings.com/v1/", headers: [
+    {"Authorization", "Bearer xyx-qwe-wewewe"},
+    {"Content-type", "application/json"},
+  ]}
+  """
   def connect(access_token) do
     %Client{access_token: access_token, api_base: @api_base, headers: build_headers(access_token)}
   end
