@@ -1,5 +1,7 @@
 defmodule Stex.Devices do
-  @moduledoc false
+  @moduledoc """
+  SmartThings Devices API endpoint library
+  """
 
   @doc """
    List all authorized devices
