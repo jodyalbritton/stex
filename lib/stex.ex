@@ -8,6 +8,9 @@ defmodule Stex do
   @api_base "https://api.smartthings.com/v1/"
 
   defmodule Client do
+    @moduledoc """
+    Builds a client for accessing the API
+    """
       defstruct access_token: nil, api_base: nil, headers: nil
   end
 
