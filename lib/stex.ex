@@ -33,6 +33,10 @@ defmodule Stex do
     %Client{access_token: access_token, api_base: @api_base, headers: build_headers(access_token)}
   end
 
+
+  @doc """
+  Parse the result
+  """
   def parse_res(response) do
     if response do
         if response.body do
@@ -42,7 +46,9 @@ defmodule Stex do
       end
   end
 
-
+  @doc """
+  Private function for building the headers
+  """
   defp build_headers(token) do
     [
       {"Authorization", "Bearer #{token}"},

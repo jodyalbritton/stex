@@ -1,5 +1,7 @@
 defmodule Stex.Locations do
-  @moduledoc false
+  @moduledoc """
+  Manipulate locations using the SmartThings API
+  """
 
 
   @doc """

@@ -75,14 +75,7 @@ defmodule Stex.Devices do
   end
 
 
-  @doc """
-  Get the commands
-  """
-  def show_commands(%{device: device, client: client}) do
-    response = Stex.get!(client.api_base <> "devices/#{device.deviceId}/commands", client.headers)
-    response
-    |> Poison.decode!
-  end
+
 
 
   @doc """
