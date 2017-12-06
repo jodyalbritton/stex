@@ -38,10 +38,19 @@ defmodule Stex.Apps do
 
 
   @doc """
+   Delete an App
+  """
+  def delete(client, app_id) do
+    response = Stex.delete!(client.api_base <> "apps/#{app_id}", client.headers)
+    response.body
+  end
+
+
+  @doc """
   Create an APP
   """
 
-  def createWebhookSmartApp(client, appName, displayName, description, singleInstance, appType, targetUrl) do
+  def createWebhookSmartApp(client, appName, displayName, description, targetUrl) do
     body = Poison.encode!(%{
         "appName" => appName,
         "displayName"=> displayName,
@@ -52,9 +61,10 @@ defmodule Stex.Apps do
           "targetUrl"=> targetUrl
         }
       })
-
-      IO.inspect body
       {:ok, response} = Stex.post(client.api_base <> "apps", body, client.headers)
+
+      response
+      |> Stex.parse_res
   end
 
 end
