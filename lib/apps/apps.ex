@@ -25,6 +25,9 @@ defmodule Stex.Apps do
 
   @doc """
    Show app
+
+  ## Examples
+      iex> Stex.Apps.show(client, app_id)
   """
   def show(client, app_id) do
     response = Stex.get!(client.api_base <> "apps/#{app_id}", client.headers)
