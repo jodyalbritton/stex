@@ -98,7 +98,12 @@ defmodule Stex.Apps do
   def set_auth_scopes(client, app) do
     body = Poison.encode!(%{
         "scope" => [
-          "r:devices:*"
+          "r:devices:*",
+          "l:devices",
+          "l:installedapps",
+          "r:installedapps:*",
+          "r:schedules",
+          "w:schedules"
           ],
         "clientName" => app.displayName
       })
