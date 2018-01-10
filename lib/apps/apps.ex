@@ -73,6 +73,26 @@ defmodule Stex.Apps do
   end
 
   @doc """
+  Update an App
+  """
+  def updateWebhookSmartApp(client, connector) do
+    body = Poison.encode!(%{
+        "appName" => connector.app_name,
+        "displayName"=> connector.display_name,
+        "description"=> connector.description,
+        "singleInstance"=> false,
+        "appType" => "WEBHOOK_SMART_APP",
+        "webhookSmartApp"=> %{
+          "targetUrl"=> connector.target_url
+        }
+      })
+      {:ok, response} = Stex.put(client.api_base <> "apps/#{connector.app_id}", body, client.headers)
+
+      #Look at the response
+      IO.inspect response
+  end
+
+  @doc """
   Create the authentication scopes for a new connector app.
   """
   def set_auth_scopes(client, app) do
