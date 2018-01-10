@@ -4,7 +4,7 @@ defmodule Stex.Mixfile do
   def project do
     [
       app: :stex,
-      version: "0.2.0",
+      version: "0.2.2",
       elixir: "~> 1.5",
       description: "A lightweight client for the new SmartThings API",
       source_url: "https://github.com/jodyalbritton/stex",

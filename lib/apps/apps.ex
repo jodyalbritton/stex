@@ -66,6 +66,24 @@ defmodule Stex.Apps do
       })
       {:ok, response} = Stex.post(client.api_base <> "apps", body, client.headers)
 
+      #Look at the response
+      IO.inspect response
+      response
+      |> Stex.parse_res
+  end
+
+  @doc """
+  Create the authentication scopes for a new connector app.
+  """
+  def set_auth_scopes(client, app) do
+    body = Poison.encode!(%{
+        "scope" => [
+          "r:devices:*"
+          ],
+        "clientName" => app.appName
+      })
+      {:ok, response} = Stex.put(client.api_base <> "apps/#{app.appId}/oauth", body, client.headers)
+
       response
       |> Stex.parse_res
   end

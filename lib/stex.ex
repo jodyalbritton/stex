@@ -46,9 +46,6 @@ defmodule Stex do
       end
   end
 
-  @doc """
-  Private function for building the headers
-  """
   defp build_headers(token) do
     [
       {"Authorization", "Bearer #{token}"},
