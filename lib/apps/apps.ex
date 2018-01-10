@@ -80,7 +80,7 @@ defmodule Stex.Apps do
         "scope" => [
           "r:devices:*"
           ],
-        "clientName" => app.appName
+        "clientName" => app.displayName
       })
       {:ok, response} = Stex.put(client.api_base <> "apps/#{app.appId}/oauth", body, client.headers)
 
