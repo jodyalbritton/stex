@@ -51,7 +51,6 @@ defmodule Stex.Subscriptions do
   @doc """
   Create an APP
   """
-
   def createSubscription(client, app_id, device_id, componentId, capability, attribute, stateChangeOnly, value) do
     body = Poison.encode!(%{
         "sourceType" => "DEVICE",
@@ -70,6 +69,18 @@ defmodule Stex.Subscriptions do
       IO.inspect response
       response
       |> Stex.parse_res
+  end
+
+  @doc """
+  Delete all subscriptions
+  """
+  def deleteSubscriptions(client, app_id) do
+    {:ok, response} = Stex.delete(client.api_base <> "installedapps/#{app_id}/subscriptions", client.headers)
+
+    #Look at the response
+    IO.inspect response
+    response
+    |> Stex.parse_res
   end
 
 
