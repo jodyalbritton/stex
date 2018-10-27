@@ -83,7 +83,7 @@ defmodule Stex.Devices do
 
 
    This function is chainable
-   
+
     ## Examples
       iex> client = Stex.connect(your_access_token)
       iex> device = Stex.Devices.show(some_device_id)
@@ -114,7 +114,8 @@ defmodule Stex.Devices do
   """
   def show_component_status(%{device: device, client: client}, component_id) do
     response = Stex.get!(client.api_base <> "devices/#{device.deviceId}/components/#{component_id}/status", client.headers)
-    response.body
+    response
+    |> Stex.parse_res
   end
 
 

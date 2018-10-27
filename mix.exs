@@ -4,7 +4,7 @@ defmodule Stex.Mixfile do
   def project do
     [
       app: :stex,
-      version: "0.2.5",
+      version: "0.2.6",
       elixir: "~> 1.5",
       description: "A lightweight client for the new SmartThings API",
       source_url: "https://github.com/jodyalbritton/stex",
@@ -33,7 +33,7 @@ defmodule Stex.Mixfile do
       {:httpoison, "~> 0.13"},
       {:poison, "~> 3.1"},
       {:apex, "~>1.2.0"},
-      {:ex_doc, ">= 0.0.0", only: :dev}
+      {:ex_doc, "~> 0.19", only: :dev, runtime: false}
     ]
   end
 end
