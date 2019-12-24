@@ -6,21 +6,19 @@ defmodule Stex.Apps do
   @doc """
   List all apps
   """
-  def list(client) do
+  def list(client, params \\ nil) do
     options = [
-      params: %{
-        max: "200"
-      }
     ]
 
+     new_opts =
+     if params != nil do
+      options ++ params
+     else
+      options
+     end
 
-    response = Stex.get!(client.api_base <> "apps", client.headers, options)
-    final =
-    response
-    |> Stex.parse_res
-
-
-    final.items
+    Stex.get_list("apps", client.headers, [params: new_opts])
+    |> Stex.handle_response()
   end
 
   @doc """
@@ -30,13 +28,11 @@ defmodule Stex.Apps do
       iex> Stex.Apps.show(client, app_id)
   """
   def show(client, app_id) do
-    response = Stex.get!(client.api_base <> "apps/#{app_id}", client.headers)
-
     app =
-    response
-    |> Stex.parse_res
+    Stex.get_single("apps/#{app_id}", client.headers)
+    |> Stex.handle_response()
 
-    %{client: client, app: app}
+    %{ client: client, app: app}
   end
 
 
@@ -44,8 +40,8 @@ defmodule Stex.Apps do
    Delete an App
   """
   def delete(client, app_id) do
-    response = Stex.delete!(client.api_base <> "apps/#{app_id}", client.headers)
-    response.body
+    Stex.delete_single("apps/#{app_id}", client.headers)
+    |> Stex.handle_response()
   end
 
 

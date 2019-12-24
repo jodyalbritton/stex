@@ -6,56 +6,53 @@ defmodule Stex.Devices do
   @doc """
    List all authorized devices
 
-   Max: 200 by default will return up to 200 devices.
+   Accepts optional params list.
 
+   Max - Maximum number of devices returned. Default is 200 Accepts one [max="10"]
+   Capability - Filter based on capability. Accepts multiple [...capability="1", capability="2"]
+   LocationId - Filter based on LocationId Accepts multiple [...locationId="1", locationId="2"]
+   DeviceId   - Filter based on DeviceId. Accepts multiple [...deviceId="1", deviceId="2" ]
+   CapabilitiesMode - Set the way capabilities are filtered Accepts one of "And" / "Or" [capabilitiesMode="and"]
+
+   [
+     max: "integer",
+     capability: "string",
+     locationId: "string",
+     deviceId: "string",
+     capabilitiesMode: "string"
+   ]
 
    ## Examples
       iex> client = Stex.connect(your_access_token)
+
+      All Devices
       iex> Stex.Devices.list(client)
+
+      Limit Devices to 10
+      iex> Stex.Devices.list(client, [max: "10"])
+
+      Filter on a capability
+      iex> Stex.Devices.list(client, [capability: "powerMeter"])
+
+      Multiple Params
+      iex> Stex.Devices.list(client, [max: "10", capability="powerMeter", capability="switch"])
+
   """
-  def list(client) do
+  def list(client, params \\ nil) do
     options = [
-      params: %{
-        max: "200"
-      }
     ]
 
+     new_opts =
+     if params != nil do
+      options ++ params
+     else
+      options
+     end
 
-    response = Stex.get!(client.api_base <> "devices", client.headers, options)
-    final =
-    response
-    |> Stex.parse_res
-
-
-    final.items
+    Stex.get_list("devices", client.headers, [params: new_opts])
+    |> Stex.handle_response()
   end
 
-  @doc """
-  SmartThings built in endpoint for finding devices based on capability
-
-  Max: 200 by default will return up to 200 devices.
-  ** Curently Broken! **
-
-  ## Examples
-     iex> client = Stex.connect(your_access_token)
-     iex> Stex.Devices.list_by_capability(client, "powerMeter")
-  """
-  def list_by_capability(client, capability) do
-    options = [
-      params: %{
-        max: "200",
-        capability: "#{capability}"
-      }
-    ]
-    response = Stex.get!(client.api_base <> "devices", client.headers,options)
-
-    final =
-    response
-    |> Stex.parse_res
-
-
-    final.items
-  end
 
   @doc """
    Show device
@@ -65,13 +62,11 @@ defmodule Stex.Devices do
       iex> Stex.Devices.show(client, "some-device-id")
   """
   def show(client, device_id) do
-    response = Stex.get!(client.api_base <> "devices/#{device_id}", client.headers)
-
     device =
-    response
-    |> Stex.parse_res
+    Stex.get_single("devices/#{device_id}", client.headers)
+    |> Stex.handle_response()
 
-    %{client: client, device: device}
+    %{ client: client, device: device}
   end
 
 
@@ -90,14 +85,9 @@ defmodule Stex.Devices do
       iex> status = device |> show_status
   """
   def show_status(%{device: device, client: client}) do
-    response = Stex.get!(client.api_base <> "devices/#{device.deviceId}/status", client.headers)
-    response
-    |> Stex.parse_res
+    Stex.get_single("devices/#{device.deviceId}/status", client.headers)
+    |> Stex.handle_response()
   end
-
-
-
-
 
   @doc """
    Get the status of all attributes of a the component. The results may be
@@ -113,9 +103,8 @@ defmodule Stex.Devices do
       iex> component_status = device |> show_component_status("main")
   """
   def show_component_status(%{device: device, client: client}, component_id) do
-    response = Stex.get!(client.api_base <> "devices/#{device.deviceId}/components/#{component_id}/status", client.headers)
-    response
-    |> Stex.parse_res
+    Stex.get_single("devices/#{device.deviceId}/components/#{component_id}/status", client.headers)
+    |> Stex.handle_response()
   end
 
 
@@ -129,32 +118,7 @@ defmodule Stex.Devices do
       iex> component_status = device |> show_capability_status("main", "powerMeter")
   """
   def show_capability_status(%{device: device, client: client}, component_id, capability_id) do
-    response = Stex.get!(client.api_base <> "devices/#{device.deviceId}/components/#{component_id}/capabilities/#{capability_id}/status", client.headers)
-    response
-    |> Stex.parse_res
-  end
-
-
-  @doc """
-    Filter utility for finding devices with the specified capability.
-
-    ## Examples
-      iex> client = Stex.connect(your_access_token)
-      iex> list = Stex.Devices.list(client)
-      iex> devices = Stex.Devices.filter_by_capability(list, "powerMeter")
-  """
-  def filter_devices_by_capability(devices, capability) do
-    filtered = []
-    new_list =
-    for device <- devices do
-      if find_by_cap(List.first(device.components).capabilities, %{id: capability}) == true do
-        [device | filtered]
-      end
-    end
-    List.flatten(Enum.filter(new_list, & !is_nil(&1)))
-  end
-  # Utility function for finding the members of a list
-  defp find_by_cap(list, cap) do
-    Enum.member?(list, cap)
+    Stex.get_single("devices/#{device.deviceId}/components/#{component_id}/capabilities/#{capability_id}/status", client.headers)
+    |> Stex.handle_response()
   end
 end

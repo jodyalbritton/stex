@@ -34,16 +34,34 @@ defmodule Stex do
   end
 
 
+  def get_list(endpoint, headers, options) do
+    HTTPoison.request(:get, request_url(endpoint), [], headers, options)
+  end
+
+  def get_single(endpoint, headers) do
+    HTTPoison.request(:get, request_url(endpoint), [], headers)
+  end
+
+  def delete_single(endpoint, headers) do
+    HTTPoison.request(:delete, request_url(endpoint), [], headers)
+  end
+
+  defp request_url(endpoint) do
+    @api_base <> endpoint
+  end
+
+  def handle_response({:error, struct}), do: {:error, "There was an error", struct}
+  def handle_response({:ok, %{body: body, status_code: 200}}), do: parse_res(body)
+  def handle_response({:ok, %{body: body, headers: headers, status_code: code}}) do
+    %{"error" => error, "message" => message} = Poison.decode!(body)
+  end
+
   @doc """
   Parse the result
   """
   def parse_res(response) do
-    if response do
-        if response.body do
-          response.body
-          |> Poison.Parser.parse!(keys: :atoms)
-        end
-      end
+        response
+        |> Poison.Parser.parse!(keys: :atoms)
   end
 
   defp build_headers(token) do
